@@ -107,7 +107,9 @@ Extract the name from the :name property."
   "Return a list of all launch configurations in JSON.
 JSON must have been acquired with `dap-launch--get-launch-json'."
   (mapcar #'dap-launch-configuration-prepend-name
-          (or (plist-get json :configurations) (list json))))
+          (or (vconcat (mapcar (lambda(x) (plist-put x :type "compound"))
+                               (plist-get json :compounds))
+                       (plist-get json :configurations)) (list json))))
 
 (defun dap-launch-find-parse-launch-json ()
   "Return a list of all launch configurations for the current project.
